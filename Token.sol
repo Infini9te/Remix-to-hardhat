@@ -8,53 +8,30 @@ import "hardhat/console.sol";
 
 
 
-contract Token {
-    
-    string public name = "Hardhat Token";
-    string public symbol = "MHT";
+contract MyToken {
 
-    
-    uint256 public totalSupply = 9000000;
+    // public variables here
+    string public tokenName ="Meta";
+    string public Abbrv ="MTA";
+    uint public totalSupply= 0;
 
-    
-    address public owner;
+    // mapping variable here
+    mapping(address => uint) public balances;
 
-    
-    mapping(address => uint256) balances;
+    // mint function
+    function mint(address _address,uint _value)public {
+        totalSupply += _value;
+        balances[_address] += _value;
 
-    
-    event Transfer(address indexed _from, address indexed _to, uint256 _value);
-
-   
-    constructor() {
-        
-        balances[msg.sender] = totalSupply;
-        owner = msg.sender;
     }
 
-    
-    function transfer(address to, uint256 amount) external {
-       
-        require(balances[msg.sender] >= amount, "Not enough tokens");
+    // burn function
+    function burn(address _address,uint _value)public {
+        if(balances[_address] >=_value){
+         totalSupply -= _value;
+         balances[_address] -= _value;
+        }
 
-        
-        console.log(
-            "Transferring from %s to %s %s tokens",
-            msg.sender,
-            to,
-            amount
-        );
-
-        
-        balances[msg.sender] -= amount;
-        balances[to] += amount;
-
-        
-        emit Transfer(msg.sender, to, amount);
     }
 
-    
-    function balanceOf(address account) external view returns (uint256) {
-        return balances[account];
-    }
 }
